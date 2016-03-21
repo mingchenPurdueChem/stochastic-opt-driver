@@ -6,6 +6,7 @@ import numpy
 from numpy import linalg
 # This is to use stochastic gradient descent
 import stogd
+import quasiNewton
 # This is the module for specific package to calculate force
 import piny
 
@@ -154,7 +155,7 @@ for i in range(num_atom):
     file_force_traj.write(w_str_force)
 
 # zip the parameters for delivery
-opt_param_pack = [coord,force_test,force_pkg,step_size,num_atom,file_force_traj,file_coord_traj,force_calc_util,max_shift_conv,mean_shift_conv,max_step,coord_bm]
+opt_param_pack = [coord,force_test,force_pkg,step_size,num_atom,file_force_traj,file_coord_traj,force_calc_util,max_shift_conv,mean_shift_conv,max_step,coord_bm,force]
 
 step = 1
 stop_flag = 0 # This one controls whether to stop the optimization
@@ -164,6 +165,8 @@ if opt_type=="gradient-direct":
     stogd.sto_gd_direct(opt_param_pack,num_force_store)
 if opt_type=="gradient-mean":
     stogd.sto_gd_mean(opt_param_pack,num_force_store)
+if opt_type=="bfgs":
+    quasiNewton.sto_bfgs(opt_param_pack)
       
 file_coord_traj.close()
 file_force_traj.close()
